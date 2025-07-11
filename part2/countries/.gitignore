@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# VITE env 
+.env.local
+# JSON
+db.json
