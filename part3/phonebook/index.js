@@ -1,8 +1,3 @@
-const express = require('express')
-const app = express()
-
-app.use(express.json())
-
 let persons = [
     { 
       "id": "1",
@@ -26,10 +21,43 @@ let persons = [
     }
 ]
    
+//////////////////////////////////////////////////
+
+const express = require('express')
+const app = express()
+
+app.use(express.json())
+
+const morgan = require('morgan')
+
+
+morgan.token('body', (req, res) => { 
+    if (req.body){
+        return `{ "name":"${req.body.name}","number":"${req.body.number}" }`     
+    }else{
+        return null
+    }
+}
+)
+
+
+middleware = morgan( (tokens, req, res)=>{
+    return [
+        tokens.method(req, res),
+        tokens.url(req, res),
+        tokens.status(req, res),
+        tokens.res(req, res, 'content-length'),'-',
+        tokens['response-time'](req, res), 'ms',
+        tokens.body(req, res)
+    ].join(' ')
+} )
+  
+app.use(middleware)
+
+
 app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
-
 
 app.get('/api/info', (request, response) => {
     const currentTime = new Date()
@@ -51,6 +79,8 @@ app.get('/api/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length}  people</p>
         <p>${dateString} ${timeZoneName}</p>`)
 })
+
+/////////////////////////////////////////
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
