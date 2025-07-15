@@ -12,8 +12,8 @@ return request.then( response =>  response.data )
 }
 
 const update = (id, newObject) => {
-    const request = axios.put(`${baseURL}/${id}`, newObject)
-return request.then( response => response.data )
+    return axios.put(`${baseURL}/${id}`, newObject)
+                    
 }
 
 const deletePersonFromDb = (id) => {

@@ -48,7 +48,27 @@
     {
       "id": "34b8",
       "name": "Carlos Fuentes",
-      "number": "52-654-836-745"
+      "number": "52-863-951-852"
+    },
+    {
+      "id": "51be",
+      "name": "Rosario Castellanos",
+      "number": "52-785-985-521"
+    },
+    {
+      "id": "5f0f",
+      "name": "Sor Juana Inés de la Cruz",
+      "number": "52-745-861-654"
+    },
+    {
+      "id": "c21b",
+      "name": "Le Cobusier",
+      "number": "45-321-698-742"
+    },
+    {
+      "id": "70ac",
+      "name": "Gengis Kan",
+      "number": "53-987-453-362"
     }
   ]
 }
