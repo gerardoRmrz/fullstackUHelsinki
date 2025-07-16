@@ -18,6 +18,10 @@ let persons = [
       "id": "4",
       "name": "Mary Poppendieck", 
       "number": "39-23-6423122"
+    },{
+        "id": "5",
+        "name": "Doroteo Arango",
+        "number": "52-468-743-124"
     }
 ]
    
@@ -27,6 +31,7 @@ const express = require('express')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 const morgan = require('morgan')
 
@@ -137,7 +142,7 @@ app.post('/api/persons', (request, response) => {
 
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
