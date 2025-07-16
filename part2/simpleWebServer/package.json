@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "how to create a back end",
+  "main": "index.js",
+  "scripts": {
+    "build:ui": "rm -rf dist && cd ../part2-notes-frontend && npm run build && cp -r dist ../simpleWebServer",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "Gerardo Ramirez",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
