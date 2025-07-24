@@ -1,4 +1,3 @@
-console.log('********models/person.js******')
 const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
