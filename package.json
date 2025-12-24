@@ -6,13 +6,15 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "node --test"
   },
   "author": "GRR",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
     "express": "^5.2.1",
     "mongoose": "^9.0.2"
   },
