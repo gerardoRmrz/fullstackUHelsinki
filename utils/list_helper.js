@@ -20,9 +20,23 @@ const favoriteBlog = (blogs) => {
   return blogs.reduce( (acc, curr) =>  curr.likes > acc.likes? curr: acc , { likes: -1 } )
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length===0){
+    return null
+  }
+
+  const authors = [...new Set( blogs.map( blog => blog.author ) )  ]
+
+  const blogsCount = authors.map(  author => { return {author, blogs: blogs.filter( blog => blog.author===author ).length}})
+  
+  const maxBlogs = blogsCount.reduce( (acc, curr) => curr.blogs > acc.blogs ? curr : acc, { blogs: -1 }   )
+
+  return maxBlogs
+}
 
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
