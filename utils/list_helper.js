@@ -1,3 +1,5 @@
+const blogsList = require("../tests/blogsList")
+
 const dummy = (blogs) => {
   return 1
 }
@@ -34,9 +36,27 @@ const mostBlogs = (blogs) => {
   return maxBlogs
 }
 
+const mostLikes = (blogsList) => {
+    if (blogs.length===0){
+    return null
+  }
+
+  const authors = [...new Set( blogs.map( blog => blog.author ) )  ]
+
+  const blogsCount = authors.map(  author => { 
+    return { author,
+             likes: blogsList.filter( blog => blog.author===author ).reduce( (acc, curr)=> curr.likes + acc, 0 )
+           }}
+           
+          )
+
+  return blogsCount.reduce( (acc, curr) => curr.likes > acc.likes ? curr : acc, { likes: -1 }   )
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
