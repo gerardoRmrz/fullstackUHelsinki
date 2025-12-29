@@ -37,7 +37,7 @@ const newBlog = { title: "Learning Javascript",
                     url: "http://theJavaScript.com",
                     likes: 1}
 
-test.only( 'blogs are correctly created with POST request', async () => {
+test( 'blogs are correctly created with POST request', async () => {
   
   const formerLength = initialBlogs.length
 
@@ -58,6 +58,19 @@ test.only( 'blogs are correctly created with POST request', async () => {
                         
 } )
 
+const blogNoLikes = { title: "Learning Javascript",
+                    author: "Lou Natic",
+                    url: "http://theJavaScript.com"}
+
+test.only('blogs has the correct "like" property value if request miss it', async () => {
+  await api.post('/api/blogs')
+            .send(blogNoLikes)
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .expect( (response) => {
+              assert.strictEqual( response.body.likes, 0 )
+            } )
+})
 
 after(async () => {
   await mongoose.connection.close()

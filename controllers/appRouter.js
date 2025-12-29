@@ -11,8 +11,8 @@ blogsRouter.get('/', (request, response) => {
 })
 
 blogsRouter.post('/', (request, response) => {
+  request.body.likes = request.body.likes?  request.body.likes: 0
   const blog = new Blog(request.body)
-
   blog
     .save()
     .then(result => {
