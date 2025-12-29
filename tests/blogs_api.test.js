@@ -15,12 +15,25 @@ const api = supertest(app)
         }
     }) 
 
-test.only('blogs are returned as json', async () => {
+/* test.only('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
-    .expect('Content-Type', /application\/json/)
+    .expect('Content-Type', /application\/json/)  
+}) */
+
+test.only('blogs have id property, not _id', async () => {
+  const response = await api.get('/api/blogs')
+    .expect(200)
+
+  for ( const blog of response.body ) {
+    if (!Object.prototype.hasOwnProperty.call(blog, 'id')){
+      throw new Error('Response body does not contain the property id')
+    }
+  }
+    
 })
+
 
 after(async () => {
   await mongoose.connection.close()
