@@ -32,13 +32,15 @@ test('blogs have id property, not _id', async () => {
   }
 })
 
-const newBlog = { title: "Learning Javascript",
+
+test( 'blogs are correctly created with POST request', async () => {
+  
+  const newBlog = { title: "Learning Javascript",
                     author: "Lou Natic",
                     url: "http://theJavaScript.com",
                     likes: 1}
 
-test( 'blogs are correctly created with POST request', async () => {
-  
+
   const formerLength = initialBlogs.length
 
     await api.post('/api/blogs')
@@ -58,11 +60,13 @@ test( 'blogs are correctly created with POST request', async () => {
                         
 } )
 
-const blogNoLikes = { title: "Learning Javascript",
+
+test('blogs has the correct "like" property value if request miss it', async () => {
+  
+  const blogNoLikes = { title: "Learning Javascript",
                     author: "Lou Natic",
                     url: "http://theJavaScript.com"}
 
-test.only('blogs has the correct "like" property value if request miss it', async () => {
   await api.post('/api/blogs')
             .send(blogNoLikes)
             .expect('Content-Type', /json/)
@@ -72,6 +76,26 @@ test.only('blogs has the correct "like" property value if request miss it', asyn
             } )
 })
 
+test.only( 'Api response with code 400, bad request if title or url are missed', async () => {
+  
+  const blogNoTitle = { 
+                    author: "Lou Natic",
+                    url: "http://theJavaScript.com",
+                    likes: 0}
+
+  const blogNoUrl = { title: "Learning Javascript",
+                    author: "Lou Natic",
+                    likes: 1}
+
+  await api.post('/api/blogs')
+            .send(blogNoTitle)
+            .expect(400)
+  
+  await api.post('/api/blogs')
+            .send(blogNoUrl)
+            .expect(400)            
+} )
+                    
 after(async () => {
   await mongoose.connection.close()
 })
