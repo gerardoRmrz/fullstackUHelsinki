@@ -1,4 +1,5 @@
 const { test, after, beforeEach } = require('node:test')
+const assert = require('node:assert')
 const Blog = require('../models/blog')
 const initialBlogs = require('./blogsList')
 const mongoose = require('mongoose')
@@ -15,24 +16,47 @@ const api = supertest(app)
         }
     }) 
 
-/* test.only('blogs are returned as json', async () => {
+test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)  
-}) */
+})
 
-test.only('blogs have id property, not _id', async () => {
+test('blogs have id property, not _id', async () => {
   const response = await api.get('/api/blogs')
     .expect(200)
 
   for ( const blog of response.body ) {
-    if (!Object.prototype.hasOwnProperty.call(blog, 'id')){
-      throw new Error('Response body does not contain the property id')
-    }
+    assert(blog.hasOwnProperty('id'), 'The blogs should have the property "id"')
   }
-    
 })
+
+const newBlog = { title: "Learning Javascript",
+                    author: "Lou Natic",
+                    url: "http://theJavaScript.com",
+                    likes: 1}
+
+test.only( 'blogs are correctly created with POST request', async () => {
+  
+  const formerLength = initialBlogs.length
+
+    await api.post('/api/blogs')
+            .send(newBlog)
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .expect( (response) => {
+              const { id: _, ...newObj } = response.body
+              assert.deepStrictEqual(newObj, newBlog)
+            } )
+    
+    await api.get('/api/blogs')
+             .expect(200)
+             .expect( (response) => {
+                assert.strictEqual(response.body.length, formerLength+1)               
+             } )
+                        
+} )
 
 
 after(async () => {
