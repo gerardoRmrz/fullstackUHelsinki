@@ -3,15 +3,12 @@ const { request } = require('../app')
 const Blog = require('../models/blog')
 
 
-blogsRouter.get('/', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs)
-    })
+blogsRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({})
+  response.json(blogs)
 })
 
-blogsRouter.post('/', (request, response) => {
+blogsRouter.post('/', async (request, response) => {
 
   if ( !request.body.title || !request.body.url ){
    return response.status(400).end()
@@ -19,11 +16,10 @@ blogsRouter.post('/', (request, response) => {
 
   request.body.likes = request.body.likes?  request.body.likes: 0
   const blog = new Blog(request.body)
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })
+  
+  const result = await blog.save()
+  response.status(201).json(result)
+
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
