@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const Blog = require('../models/blog')
 const initialBlogs = require('./blogsList')
@@ -76,7 +76,7 @@ test('blogs has the correct "like" property value if request miss it', async () 
             } )
 })
 
-test.only( 'Api response with code 400, bad request if title or url are missed', async () => {
+test( 'Api response with code 400, bad request if title or url are missed', async () => {
   
   const blogNoTitle = { 
                     author: "Lou Natic",
@@ -95,7 +95,35 @@ test.only( 'Api response with code 400, bad request if title or url are missed',
             .send(blogNoUrl)
             .expect(400)            
 } )
-                    
+           
+describe('deletion of a blog', () => {
+
+    test.only('when "id" does not exist in data base, it returns 400 request code', async () => {
+      const deletedBlog = await api
+                                  .delete('/api/blogs/697b3323fa765fe32cde9383')
+                                  .expect(400)
+    })
+
+    test.only('when id does exist in data base, it return 204 request code and the length of a blog list is one less before', async () => {
+       
+      const blogToBeDeleted = await Blog.find({ author: "Michael Chan" })
+      const id = blogToBeDeleted[0]._id.toString()
+      
+      await api 
+              .delete(`/api/blogs/${id}`)
+              .expect(204)
+
+      const blogsAfterDeletion = await api.get('/api/blogs')
+
+      assert.strictEqual(blogsAfterDeletion._body.length, initialBlogs.length - 1)
+  
+      assert( !blogsAfterDeletion._body.includes(blogToBeDeleted[0]) )
+
+    })    
+  })
+
+
+
 after(async () => {
   await mongoose.connection.close()
 })
