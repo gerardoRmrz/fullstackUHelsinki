@@ -124,14 +124,14 @@ describe('deletion of a blog', () => {
 
 describe('update information of a blog', () => {
 
-  test.only('when "id" does not exist in data base, it returns 400 request code', async () => {
+  test('when "id" does not exist in data base, it returns 400 request code', async () => {
         
     await api.put(`/api/blogs/5a422aa71b54a676234d17d8`)
       .expect(400)
 
   })
 
-  test.only('when "id" exist in data base, it returns the updated blog with likes increased by one', async () => {
+  test('when "id" exist in data base, it returns the updated blog with likes increased by one', async () => {
     const blogToBeUpdated = await Blog.find({ author: "Michael Chan" })
     const id = blogToBeUpdated[0]._id.toString()
 

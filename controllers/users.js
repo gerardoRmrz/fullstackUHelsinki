@@ -12,7 +12,7 @@ const checkUsernameLength = (username) => {
 
 const checkUserNameUnique = (username) => {
   const isUserinDb = User.find( {username} )
-  return isUserinDb
+  return !isUserinDb
 }
 
 const checkPasswordLength = (passw) => {
@@ -21,12 +21,19 @@ const checkPasswordLength = (passw) => {
 
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
+  
+  if ( !username || !name || !password ) {
+    console.log( 'checking username, name, password' )
+    return response.status(400).json({error: 'The username, name or password is missing'})
+  }
 
   if ( !checkUsernameLength(username) || !checkPasswordLength(password)) {
+    console.log('checking username and password length')
     return response.status(400).json( {error: 'The user name and password should be at least 3 chars long'} )
   }
 
   if ( checkUserNameUnique(username) ) {
+    console.log('checking username unicity')
     return response.status(400).json({error: 'The user name should be unique'})
   }
 
@@ -42,13 +49,12 @@ usersRouter.post('/', async (request, response) => {
 
   const savedUser = await user.save()
 
-  response.json(savedUser)
+  return response.status(200).json(savedUser)
 
 })
 
 usersRouter.get('/', async (request, response) => {
   const userList = await User.find({})
-  
   response.json( userList )
 })
 
