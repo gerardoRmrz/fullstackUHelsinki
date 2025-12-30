@@ -11,8 +11,8 @@ const checkUsernameLength = (username) => {
 }
 
 const checkUserNameUnique = (username) => {
-  const isUnique = User.find( {username} )
-  return isUnique? false: true
+  const isUserinDb = User.find( {username} )
+  return isUserinDb
 }
 
 const checkPasswordLength = (passw) => {
@@ -26,7 +26,7 @@ usersRouter.post('/', async (request, response) => {
     return response.status(400).json( {error: 'The user name and password should be at least 3 chars long'} )
   }
 
-  if ( !checkUserNameUnique(username) ) {
+  if ( checkUserNameUnique(username) ) {
     return response.status(400).json({error: 'The user name should be unique'})
   }
 
