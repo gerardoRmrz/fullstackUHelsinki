@@ -1,6 +1,6 @@
-const mongoose = required('mongoose')
+const mongoose = require('mongoose')
 
-const userSchema = new mongoose.userSchema({
+const userSchema = new mongoose.Schema({
   username: String,
   name: String,
   passwordHash: String,
@@ -12,12 +12,13 @@ const userSchema = new mongoose.userSchema({
   ]
 })
 
-userSchema.set('toJson', {
-  transform: (document, returnedDocument) => {
+userSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
     delete returnedObject.passwordHash
+    return returnedObject
   }
 })
 
