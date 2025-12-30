@@ -98,13 +98,13 @@ test( 'Api response with code 400, bad request if title or url are missed', asyn
            
 describe('deletion of a blog', () => {
 
-    test.only('when "id" does not exist in data base, it returns 400 request code', async () => {
+    test('when "id" does not exist in data base, it returns 400 request code', async () => {
       const deletedBlog = await api
                                   .delete('/api/blogs/697b3323fa765fe32cde9383')
                                   .expect(400)
     })
 
-    test.only('when id does exist in data base, it return 204 request code and the length of a blog list is one less before', async () => {
+    test('when id does exist in data base, it return 204 request code and the length of a blog list is one less before', async () => {
        
       const blogToBeDeleted = await Blog.find({ author: "Michael Chan" })
       const id = blogToBeDeleted[0]._id.toString()
@@ -122,7 +122,25 @@ describe('deletion of a blog', () => {
     })    
   })
 
+describe('update information of a blog', () => {
 
+  test.only('when "id" does not exist in data base, it returns 400 request code', async () => {
+        
+    await api.put(`/api/blogs/5a422aa71b54a676234d17d8`)
+      .expect(400)
+
+  })
+
+  test.only('when "id" exist in data base, it returns the updated blog with likes increased by one', async () => {
+    const blogToBeUpdated = await Blog.find({ author: "Michael Chan" })
+    const id = blogToBeUpdated[0]._id.toString()
+
+    const updatedBlog = await api.put(`/api/blogs/${id}`).expect(200)
+    assert.strictEqual(blogToBeUpdated[0].likes, updatedBlog._body.likes-1)
+    
+  })
+
+})
 
 after(async () => {
   await mongoose.connection.close()
