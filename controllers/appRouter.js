@@ -1,22 +1,43 @@
 const blogsRouter = require('express').Router()
 const { request } = require('../app')
 const Blog = require('../models/blog')
-
+const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
+  
   const blogs = await Blog.find({})
-  response.json(blogs)
+                          .populate('userId', { username:1, name:1 })
+
+  console.log('appRouter: ', blogs)
+
+  response.status(200).json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
 
-  if ( !request.body.title || !request.body.url ){
+  if ( !request.body.title || !request.body.url ) {
    return response.status(400).end()
   }
 
-  request.body.likes = request.body.likes?  request.body.likes: 0
-  const blog = new Blog(request.body)
+  const user = await User.findById(request.body.userId)
   
+  if (!user) {
+    return response.status(400).json({error: "userId does not founded in database"})
+  }
+
+  request.body.likes = request.body.likes?  request.body.likes: 0
+  
+  const blog = new Blog({
+                  _id: request.body.id,
+                  title: request.body.title,
+                  url: request.body.url,
+                  author: request.body.author,
+                  likes: request.body.likes,
+                  userId: user.id,
+  })
+  
+  console.log('appRouter: ', blog )
+
   const result = await blog.save()
   response.status(201).json(result)
 

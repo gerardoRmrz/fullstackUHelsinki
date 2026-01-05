@@ -18,6 +18,7 @@ beforeEach( async () => {
     let passwordHash = await bcrypt.hash(user.password, saltRounds)
     
     let userObject = new User( {
+       _id: user._id,
        name:user.name,
        username: user.username,
        passwordHash: passwordHash,
@@ -74,7 +75,7 @@ describe('Creating a new user', ()=>{
 
   })
 
-  test.only('when create a new user and user data is correct, then add the new user to database and return code 200 and new user data', async ()=>{
+  test('when create a new user and user data is correct, then add the new user to database and return code 200 and new user data', async ()=>{
     
 
     const newValidUser = {

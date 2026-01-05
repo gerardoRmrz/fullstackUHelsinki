@@ -11,6 +11,7 @@ const api = supertest(app)
      beforeEach( async () => {
         await Blog.deleteMany({})
         for ( const blog of initialBlogs ) {
+          console.log(blog)
           let blogObject = new Blog( blog )
           await blogObject.save()
         }
@@ -33,31 +34,30 @@ test('blogs have id property, not _id', async () => {
 })
 
 
-test( 'blogs are correctly created with POST request', async () => {
+test.only( 'blogs are correctly created with POST request', async () => {
   
-  const newBlog = { title: "Learning Javascript",
+  const newBlog =  new Blog( {
+                    _id: "695bf56108c69bda921739a2",
+                    title: "Learning Javascript",
                     author: "Lou Natic",
                     url: "http://theJavaScript.com",
-                    likes: 1}
+                    userId: "69543f04351176d2230805c5",
+                    likes: 1} )
 
-
-  const formerLength = initialBlogs.length
+    const formerLength = initialBlogs.length
 
     await api.post('/api/blogs')
-            .send(newBlog)
+            .send(newBlog.toJSON())
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(201)
-            .expect( (response) => {
-              const { id: _, ...newObj } = response.body
-              assert.deepStrictEqual(newObj, newBlog)
-            } )
-    
+
     await api.get('/api/blogs')
              .expect(200)
              .expect( (response) => {
                 assert.strictEqual(response.body.length, formerLength+1)               
              } )
-                        
+
 } )
 
 

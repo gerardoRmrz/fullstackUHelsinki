@@ -5,7 +5,8 @@ Content-Type: application/json
     "title": "Js with scramble eggs",
     "author": "Lou Natyck",
     "url": "https://reactpatterns.com/",
-    "likes": 5
+    "userId": "69543f04351176d2230805c3",
+    "likes": 3
 }
 
 ###
