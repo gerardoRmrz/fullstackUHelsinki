@@ -5,13 +5,13 @@ const initialBlogs = require('./blogsList')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const { request } = require('node:http')
 
 const api = supertest(app)
 
      beforeEach( async () => {
         await Blog.deleteMany({})
         for ( const blog of initialBlogs ) {
-          console.log(blog)
           let blogObject = new Blog( blog )
           await blogObject.save()
         }
@@ -33,23 +33,37 @@ test('blogs have id property, not _id', async () => {
   }
 })
 
-
-test.only( 'blogs are correctly created with POST request', async () => {
-  
+test.only('Api responses with code 401, unathorized if no token is given', async ()=> {
   const newBlog =  new Blog( {
-                    _id: "695bf56108c69bda921739a2",
                     title: "Learning Javascript",
                     author: "Lou Natic",
                     url: "http://theJavaScript.com",
-                    userId: "69543f04351176d2230805c5",
-                    likes: 1} )
+                    likes: 1
+                  } )
 
     const formerLength = initialBlogs.length
 
     await api.post('/api/blogs')
             .send(newBlog.toJSON())
-            .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
+            .expect(401)
+
+})
+
+
+test( 'blogs are correctly created with POST request', async () => {
+  
+  const newBlog =  new Blog( {
+                    title: "Learning Javascript",
+                    author: "Lou Natic",
+                    url: "http://theJavaScript.com",
+                    likes: 1
+                  } )
+
+    const formerLength = initialBlogs.length
+
+    await api.post('/api/blogs')
+            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hckF6IiwiaWQiOiI2OTU0M2YwNDM1MTE3NmQyMjMwODA1YzEiLCJpYXQiOjE3Njc3MTkwMzZ9.i_S417y3GL_MT38HuzvW8ybQB0BPbvGBZ9FmtfjdIWo")
+            .send(newBlog.toJSON())
             .expect(201)
 
     await api.get('/api/blogs')

@@ -1,7 +1,7 @@
 
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hckF6IiwiaWQiOiI2OTU0M2YwNDM1MTE3NmQyMjMwODA1YzEiLCJpYXQiOjE3Njc2NTI4MDN9.W4d3bX8fVKptTTLTS6simQR5rbta95HYmIGAYPlvS84
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hckF6IiwiaWQiOiI2OTU0M2YwNDM1MTE3NmQyMjMwODA1YzEiLCJpYXQiOjE3Njc3MTkwMzZ9.i_S417y3GL_MT38HuzvW8ybQB0BPbvGBZ9FmtfjdIWo
 
 {
   "title": "Testing an app with login",
