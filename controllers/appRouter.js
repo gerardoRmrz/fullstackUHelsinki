@@ -18,17 +18,11 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => { 
   
-  const decodedToken = jwt.verify(request.token, process.env.SECRET) 
-  
-  if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
-  
-    const user = await User.findById(decodedToken.id)
-  
   if ( !request.body.title || !request.body.url ) {
    return response.status(400).end()
   }
+
+  const user = request.user
 
   if (!user) {
     return response.status(400).json({error: "userId does not founded in database"})
@@ -53,16 +47,10 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
   
-  const decodedToken = jwt.verify(request.token, process.env.SECRET) 
-  
-  if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
-  
-    const user = await User.findById(decodedToken.id)
+    const user = request.user
 
     if (!user) {
-      return response.status(400).json({error: "userId does not founded in database"})
+      return response.status(400).json({error: "userId was not founded in database"})
     }
 
     const id = request.params.id 
