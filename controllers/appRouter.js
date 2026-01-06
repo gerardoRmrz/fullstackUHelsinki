@@ -52,15 +52,33 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  const id = request.params.id
   
-  const blogToBeDeleted = await Blog.findByIdAndDelete(id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET) 
+  
+  if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+  
+    const user = await User.findById(decodedToken.id)
 
-  if( !blogToBeDeleted ){
-    return response.status(400).json({ message: 'Id not founded in database' })
-  }
+    if (!user) {
+      return response.status(400).json({error: "userId does not founded in database"})
+    }
 
-  return response.status(204).json({message: 'Blog deleted successfully'})
+    const id = request.params.id 
+    
+    const blogToBeDeleted = await Blog.findById(id)
+
+    if( !blogToBeDeleted ){
+      return response.status(400).json({ message: 'Blog id was not founded in database' })
+    }
+
+    if ( blogToBeDeleted.userId.toString() === user.id.toString() ){
+      const blog = await Blog.findByIdAndDelete(id)
+      return response.status(204).end()
+    }else{
+      return response.status(401).json({error: 'Unathorized. Please log in'})
+    }
 
 })
 
