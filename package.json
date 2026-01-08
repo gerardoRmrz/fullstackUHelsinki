@@ -10,9 +10,10 @@
   "author": "Gerardo Ramírez",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.2.1",
-    "morgan": "^1.10.1",
-    "cors": "^2.8.5"
+    "mongoose": "^9.1.2",
+    "morgan": "^1.10.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

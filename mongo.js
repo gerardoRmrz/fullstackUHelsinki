@@ -1,0 +1,50 @@
+const mongoose = require('mongoose')
+
+if (process.argv.length<3) {
+  console.log('give password as argument')
+}
+
+
+const password = process.argv[2]
+
+const url = `mongodb+srv://grmzrso_db_user:${password}@cluster0.vybmnl6.mongodb.net/?appName=Cluster0`
+
+mongoose.set('strictQuery', false)
+
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+const person = new Person({
+  name: process.argv[3],
+  number: process.argv[4]
+})
+
+if (process.argv.length===3) {
+
+  Person.find({}).then( result => {
+    console.log('phonebook:')
+    result.forEach( person => {
+      console.log(`${person.name} ${person.number}`)
+    })
+  mongoose.connection.close()  
+  })
+
+} else {
+
+  person.save().then( result => {
+  console.log(result)
+  console.log('person saved!')
+  mongoose.connection.close()
+
+})
+}
+
+
+
+
