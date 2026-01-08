@@ -16,7 +16,7 @@ app.use(morgan( (tokens, request, response) => {
     tokens.method(request, response),
     tokens.url(request, response),
     tokens.status(request, response),
-    tokens.res(request, response, 'content-length'), '-',
+    tokens.res(request, response, 'content-length'), '-', 
     tokens['response-time'](request, response), 'ms',
     data
   ].join(' ')
