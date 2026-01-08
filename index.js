@@ -8,8 +8,19 @@ const Person = require('./models/people')
 const app = express()
  
 app.use(cors())
-app.use(express.json())
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
 app.use(express.static('dist'))
+app.use(express.json())
+app.use(requestLogger)
+
 app.use(morgan( (tokens, request, response) => {
   let data = null
   if( tokens.method(request, response) === 'POST' ) {
@@ -76,10 +87,14 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number( request.params.id )
-  persons = persons.filter( p => p.id!==id )
-  
-  response.status(204).end()
+  const id = request.params.id
+  Person.findByIdAndDelete(id).then( result => {
+    response.status(204).end()
+  } )
+  .catch( error => {
+    console.log(error)
+    response.status(500).end()
+  } )
 })
 
 const getRandomID = () => {
