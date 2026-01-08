@@ -4,10 +4,7 @@ if (process.argv.length<3) {
   console.log('give password as argument')
 }
 
-
-const password = process.argv[2]
-
-const url = `mongodb+srv://grmzrso_db_user:${password}@cluster0.vybmnl6.mongodb.net/?appName=Cluster0`
+const url = process.env.MONGODB_URI
 
 mongoose.set('strictQuery', false)
 

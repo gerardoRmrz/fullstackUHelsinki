@@ -1,9 +1,12 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const mongoose = require('mongoose')
+const Person = require('./models/people')
 
 const app = express()
-
+ 
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
@@ -22,7 +25,7 @@ app.use(morgan( (tokens, request, response) => {
   ].join(' ')
 } ))
 
-let persons = [
+let people = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -45,15 +48,19 @@ let persons = [
     }
 ]
 
+
 app.get('/info', (request, response) => {
-  const nPeople = persons.length
+  const nPeople = people.length
   const date = new Date()
   response.send(`<p>Pnonebook has info of ${nPeople} people</p> <p>${date.toString()}</p>`)
 })
 
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then( people => {
+    response.json(people)
+  })
+  
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -117,7 +124,7 @@ const unknownEndPoint = (request, response) => {
 
 app.use(unknownEndPoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
