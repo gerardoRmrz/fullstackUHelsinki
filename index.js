@@ -96,23 +96,16 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const personExist = persons.filter( p=> p.name===body.name )
-  
-  if (!personExist) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }
-
-  const newPerson = {
+  const newPerson = new Person(
+    {
     name: body.name,
     number: body.number,
-    id: getRandomID()
   }
+  ) 
   
-  persons = persons.concat(newPerson)
-
-  response.json(newPerson)
+  newPerson.save().then( savedPerson => {
+    response.json(savedPerson)
+  } )
 
 })
 

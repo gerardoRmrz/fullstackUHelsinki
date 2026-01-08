@@ -1,8 +1,5 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
-
-if (process.argv.length<3) {
-  console.log('give password as argument')
-}
 
 const url = process.env.MONGODB_URI
 
@@ -22,7 +19,7 @@ const person = new Person({
   number: process.argv[4]
 })
 
-if (process.argv.length===3) {
+if (process.argv.length<=3) {
 
   Person.find({}).then( result => {
     console.log('phonebook:')
