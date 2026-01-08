@@ -1,9 +1,12 @@
 const express = require('express')
+const cors = require('cors')
 const morgan = require('morgan')
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 app.use(morgan( (tokens, request, response) => {
   let data = null
   if( tokens.method(request, response) === 'POST' ) {
@@ -88,7 +91,7 @@ app.post('/api/persons', (request, response) => {
 
   const personExist = persons.filter( p=> p.name===body.name )
   
-  if (personExist) {
+  if (!personExist) {
     return response.status(400).json({
       error: 'name must be unique'
     })
@@ -99,7 +102,7 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
     id: getRandomID()
   }
-
+  
   persons = persons.concat(newPerson)
 
   response.json(newPerson)
