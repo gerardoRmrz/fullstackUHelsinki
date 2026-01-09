@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-const mongoose = require('mongoose')
 const Person = require('./models/people')
 
 const app = express()
@@ -64,7 +63,7 @@ app.get('/info', (request, response) => {
   const nPeople = Person.find({}).then( people => {
     const nPeople = people.length
     const date = new Date()
-    response.send(`<p>Pnonebook has info of ${nPeople} people</p> <p>${date.toString()}</p>`)
+    response.send(`<p>Phonebook has info of ${ nPeople } people</p> <p>${date.toString()}</p>`)
   } )
   
 })
@@ -100,11 +99,11 @@ app.delete('/api/persons/:id', (request, response, next) => {
   } )
 })
 
-const getRandomID = () => {
+/* const getRandomID = () => {
   const n = 100000000
   return Math.floor( n*Math.random() ) +1  
 }
-
+ */
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
@@ -134,7 +133,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndUpdate( 
     request.params.id,
     person,
-    {new: true, runValidators:true, context:query})
+    {new: true, runValidators:true, context:'query'})
     .then( updatedPerson => {
       response.json(updatedPerson)
     } )
