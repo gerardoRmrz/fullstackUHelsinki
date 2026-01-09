@@ -23,3 +23,12 @@ Content-Type: application/json
   "name": "Nabor Carrillo",
   "number": "52-12657123"
 }
+
+###
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Na",
+  "number": "52-12657123"
+}
