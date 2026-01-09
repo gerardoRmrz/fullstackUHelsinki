@@ -1,0 +1,15 @@
+GET http://localhost:3001/api/persons
+
+###
+GET http://localhost:3001/info
+
+###
+GET http://localhost:3001/api/persons/6960367d97e4f130f3c8db35
+
+###
+GET http://localhost:3001/api/persons/6
+
+
+
+###
+GET https://fullstack02-moz3.onrender.com/api/persons
