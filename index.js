@@ -36,7 +36,7 @@ app.use(morgan( (tokens, request, response) => {
   ].join(' ')
 } ))
 
-let people = [
+/* let people = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -57,13 +57,16 @@ let people = [
       "name": "Mary Poppendieck", 
       "number": "39-23-6423122"
     }
-]
+] */
 
 
 app.get('/info', (request, response) => {
-  const nPeople = people.length
-  const date = new Date()
-  response.send(`<p>Pnonebook has info of ${nPeople} people</p> <p>${date.toString()}</p>`)
+  const nPeople = Person.find({}).then( people => {
+    const nPeople = people.length
+    const date = new Date()
+    response.send(`<p>Pnonebook has info of ${nPeople} people</p> <p>${date.toString()}</p>`)
+  } )
+  
 })
 
 
@@ -74,16 +77,17 @@ app.get('/api/persons', (request, response) => {
   
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find( p => p.id === id )
-
-  if (!person){
-    return response.status(404).end()
-  }else{
-    return response.json(person)
-  }
-  
+app.get('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id
+  Person.findById(id)
+    .then( person => {
+      if (!person){
+        return response.status(404).end()
+      }else{
+        return response.json(person)
+      }
+    })
+    .catch( error => next(error))  
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
